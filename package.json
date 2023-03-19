@@ -1,0 +1,17 @@
+{
+  "name": "electron-crash-course",
+  "productName": "Image Resizer",
+  "version": "1.0.0",
+  "description": "electron crash course",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Yiro Yi",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^23.1.4",
+    "resize-img": "^2.0.0",
+    "toastify-js": "^1.12.0"
+  }
+}
