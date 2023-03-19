@@ -1,5 +1,5 @@
 // The main JS is a nodeJs process and we can consider this as our backend logic where we are going to place everything.
-const { app, BrowserWindow} = require('electron')
+const { app, BrowserWindow, Menu} = require('electron')
 const path = require('path')
 // When we create a new window we are instantiating a BrowserWindow, by using Chromium
 
@@ -20,10 +20,14 @@ function createMainWindow() {
   mainWindow.loadFile(path.join(__dirname, './renderer/index.html'));
 }
 
-//Boiler plate
-
+// Boiler plate
+// App is ready
 app.whenReady().then(() => {
   createMainWindow()
+
+  // Implement menu
+  const mainMenu = Menu.buildFromTemplate(menu)
+  Menu.setApplicationMenu(mainMenu)
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
@@ -31,6 +35,20 @@ app.whenReady().then(() => {
     }
   })
 })
+
+// Menu Template
+const menu = [
+  {
+    label: 'File',
+    submenu: [
+      {
+        label: 'Quit',
+        click: () => app.quit(),
+        accelerator: 'CmdOrCtrl+W'
+      }
+    ]
+  }
+]
 
 app.on('window-all-closed', () => {
   if (!isMac) {
