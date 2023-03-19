@@ -10,6 +10,13 @@ function createMainWindow() {
   const mainWindow = new BrowserWindow({
     title: 'Image Resizer',
     width: isDev ? 1000 : 500,
+    height: 600,
+    webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: true,
+      preload: path.join(__dirname, 'preload.js')
+    }, //nodeJs is used in the main process, however in the renderer process we can't for security reasons
+    // with the webPreferences we can use node modules in render safety
   })
 
   //Open DEV tools in dev_env
@@ -36,18 +43,39 @@ app.whenReady().then(() => {
   })
 })
 
+function createAboutWindow() {
+  const aboutWindow = new BrowserWindow({
+    title: 'About Image Resizer',
+    width: 300,
+    height: 300,
+  })
+
+  aboutWindow.loadFile(path.join(__dirname, './renderer/about.html'));
+}
+
 // Menu Template
 const menu = [
-  {
-    label: 'File',
+  ...(isMac ? [{
+    label: app.name,
     submenu: [
       {
-        label: 'Quit',
-        click: () => app.quit(),
-        accelerator: 'CmdOrCtrl+W'
+        label: 'About',
+        click: createAboutWindow
       }
     ]
-  }
+  }] : []),
+  {
+    role: 'fileMenu',
+  },
+  ...(!isMac ? [
+    {
+      label: 'Help',
+      submenu: [{
+        label: 'About',
+        click: createAboutWindow
+      }]
+    }
+  ] : [])
 ]
 
 app.on('window-all-closed', () => {
